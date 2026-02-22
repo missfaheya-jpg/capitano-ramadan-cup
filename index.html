@@ -1,62 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volleyball Tournament Final Scores</title>
+    <title>بطولة الكرة الطائرة</title>
     <style>
+        body {
+            background-color: #121212;
+            color: gold;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
+            border: 1px solid gold;
+            padding: 10px;
+            text-align: center;
         }
-        th {
-            background-color: #f2f2f2;
+        form {
+            margin-bottom: 30px;
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px;
+        }
+        .dark-theme {
+            background-color: #121212;
+            color: gold;
         }
     </style>
 </head>
 <body>
-    <h1>Volleyball Tournament Final Scores</h1>
-    <form id="score-form">
-        <label for="team1">Team 1:</label>
-        <input type="text" id="team1" required>
-        <label for="score1">Score:</label>
-        <input type="number" id="score1" required>
-        <label for="team2">Team 2:</label>
-        <input type="text" id="team2" required>
-        <label for="score2">Score:</label>
-        <input type="number" id="score2" required>
-        <button type="submit">Add Match</button>
-    </form>
-    <table id="score-table">
-        <thead>
-            <tr>
-                <th>Match</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>بطولة الكرة الطائرة</h1>
+        <h2>النتائج النهائية</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الفريق</th>
+                    <th>النتيجة</th>
+                </tr>
+            </thead>
+            <tbody id="scores">
+                <!-- Scores will be populated here -->
+            </tbody>
+        </table>
+        <h2>ترتيب الفرق</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الفريق</th>
+                    <th>النقاط</th>
+                </tr>
+            </thead>
+            <tbody id="standings">
+                <!-- Standings will be populated here -->
+            </tbody>
+        </table>
+        <h2>تسجيل اللاعبين</h2>
+        <form id="registrationForm">
+            <input type="text" id="playerName" placeholder="اسم اللاعب" required />
+            <select id="teamSelect">
+                <option value="team1">فريق 1</option>
+                <option value="team2">فريق 2</option>
+                <option value="team3">فريق 3</option>
+            </select>
+            <button type="submit">تسجيل</button>
+        </form>
+        <h2>إدارة المباراة</h2>
+        <div>
+            <button onclick="updateScores()">تحديث النتائج</button>
+        </div>
+    </div>
     <script>
-        document.getElementById('score-form').addEventListener('submit', function(event) {
+        // JavaScript for data persistence and functionalities
+        const scores = JSON.parse(localStorage.getItem('scores')) || [];
+        const standings = JSON.parse(localStorage.getItem('standings')) || [];
+        const registrationForm = document.getElementById('registrationForm');
+
+        function populateScores() {
+            const scoresTable = document.getElementById('scores');
+            scoresTable.innerHTML = '';
+            scores.forEach(score => {
+                const row = `<tr><td>${score.team}</td><td>${score.score}</td></tr>`;
+                scoresTable.innerHTML += row;
+            });
+        }
+
+        function populateStandings() {
+            const standingsTable = document.getElementById('standings');
+            standingsTable.innerHTML = '';
+            standings.forEach(standing => {
+                const row = `<tr><td>${standing.team}</td><td>${standing.points}</td></tr>`;
+                standingsTable.innerHTML += row;
+            });
+        }
+
+        registrationForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            const team1 = document.getElementById('team1').value;
-            const score1 = document.getElementById('score1').value;
-            const team2 = document.getElementById('team2').value;
-            const score2 = document.getElementById('score2').value;
-            const tableBody = document.getElementById('score-table').getElementsByTagName('tbody')[0];
-            const newRow = tableBody.insertRow();
-            const matchCell = newRow.insertCell(0);
-            const scoreCell = newRow.insertCell(1);
-            matchCell.textContent = `${team1} vs ${team2}`;
-            scoreCell.textContent = `${score1} - ${score2}`;
-            this.reset();
+            const playerName = document.getElementById('playerName').value;
+            const teamSelected = document.getElementById('teamSelect').value;
+            // Register player logic here...
+            alert(`تم تسجيل اللاعب ${playerName} في ${teamSelected}`);
+            // Optionally clear the form
+            registrationForm.reset();
         });
+
+        function updateScores() {
+            // Logic to update scores
+            alert('Updating scores...');
+            // Refresh the table after updating
+            populateScores();
+        }
+
+        // Initial population of scores and standings
+        populateScores();
+        populateStandings();
     </script>
 </body>
 </html>
